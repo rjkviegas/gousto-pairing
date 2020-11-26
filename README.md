@@ -23,5 +23,5 @@ Expected Output
     Whether we have successfully removed a lorry from the road, if we have saved 1000kg of CO2 then this is true (note, these aren't the real numbers, they're much larger!).
 
 
-Domain: JSON data
-Range: ???
+Domain: JSON data, boxes.json, order.json
+Range: Object { id : ???, box_id: ???}
