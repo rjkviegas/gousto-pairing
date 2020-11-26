@@ -1,4 +1,4 @@
-# Guosto Pairing Session
+# Gousto Pairing Session
 
 ## Specification
 
