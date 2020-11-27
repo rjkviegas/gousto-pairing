@@ -25,3 +25,6 @@ Expected Output
 
 Domain: JSON data, boxes.json, order.json
 Range: Object { id : ???, box_id: ???}
+
+Input / Output
+[{}], 
