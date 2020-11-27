@@ -1,5 +1,13 @@
+function takenLorryOffOfRoad(orderBoxes) {
+    return (calculateMaxCo2(orderBoxes) - calculateActualCo2(orderBoxes) >= 1000);
+}
+
 function calculateActualCo2(orderBoxes) {
     return orderBoxes.reduce((acc, orderBox) => acc + orderBox.co2FootprintKg, 0)
+}
+
+function calculateMaxCo2(orderBoxes) {
+    return orderBoxes.length * 300;
 }
 
 function calculateBoxes(boxes, orders) {
@@ -44,5 +52,6 @@ function calculateBoxes(boxes, orders) {
 
 module.exports = {
     calculateBoxes,
-    calculateActualCo2
+    calculateActualCo2,
+    takenLorryOffOfRoad
 };

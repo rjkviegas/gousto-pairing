@@ -1,4 +1,13 @@
-const { calculateActualCo2, calculateBoxes } = require("../lib/selectBox");
+const { calculateActualCo2,
+        calculateBoxes,
+        takenLorryOffOfRoad 
+} = require("../lib/selectBox");
+const boxes = require('../json/boxes.json');
+const orders = require('../json/orders.json');
+
+console.log(calculateBoxes(boxes, orders))
+console.log(takenLorryOffOfRoad(calculateBoxes(boxes, orders)));
+
 
 describe("Feature test", () => {
     const boxes = [
