@@ -1,4 +1,4 @@
-const { calculateCo2, calculateBoxes } = require("../lib/selectBox");
+const { calculateActualCo2, calculateBoxes } = require("../lib/selectBox");
 
 describe("Feature test", () => {
     const boxes = [
@@ -92,7 +92,7 @@ describe("Feature test", () => {
         // order volumeInMm3 = 75600
     ];
     
-    describe("calculateCo2", () => {
+    describe("calculateActualCo2", () => {
         it("returns sum of orders Co2 footprint", () => {
             const orderBoxes = [
                 {
@@ -106,7 +106,7 @@ describe("Feature test", () => {
                     co2FootprintKg: 100
                 }
             ];
-            expect(calculateCo2(orderBoxes)).toBe(300)
+            expect(calculateActualCo2(orderBoxes)).toBe(300)
         })
     })
     

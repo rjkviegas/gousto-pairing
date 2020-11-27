@@ -1,4 +1,4 @@
-function calculateCo2(orderBoxes) {
+function calculateActualCo2(orderBoxes) {
     return orderBoxes.reduce((acc, orderBox) => acc + orderBox.co2FootprintKg, 0)
 }
 
@@ -8,26 +8,29 @@ function calculateBoxes(boxes, orders) {
     function selectBox(order) {
         const result = {};
         result.orderId = order["id"];
-        const orderVolMm3 = calcOrderVol(order);
-        const adequatelySizedBox = boxes.map(enrichBox)
-            .sort((a, b) => a.volMm3 - b.volMm3)
+        const orderVolMm3 = calcOrderVolMm3(order);
+        const firstAdequateBox = enrichBoxes(boxes)
             .filter(box => orderVolMm3 < box.volMm3)[0]
-        result.boxId = adequatelySizedBox.id;
-        result.co2FootprintKg = adequatelySizedBox["co2FootprintKg"];
+        result.boxId = firstAdequateBox.id;
+        result.co2FootprintKg = firstAdequateBox["co2FootprintKg"];
         return result;
     
-        function calcOrderVol(order) {
+        function calcOrderVolMm3(order) {
             return order.ingredients
                 .reduce((acc, ingredient) => acc + ingredient.volumeCm3, 0) * 1000;
+        }
+
+        function enrichBoxes(boxes) {
+            return boxes.map(enrichBox).sort((a, b) => a.volMm3 - b.volMm3)
         }
     
         function enrichBox(box) {
             const result = Object.assign({}, box);
-            result.volMm3 = calcBoxVol(box);
+            result.volMm3 = calcBoxVolMm3(box);
             return result
         }
     
-        function calcBoxVol(box) {
+        function calcBoxVolMm3(box) {
             let result = 1;
             for (const dim in box.dimensions) {
                 result *= box.dimensions[dim];
@@ -41,5 +44,5 @@ function calculateBoxes(boxes, orders) {
 
 module.exports = {
     calculateBoxes,
-    calculateCo2
+    calculateActualCo2
 };
