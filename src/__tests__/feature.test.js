@@ -1,140 +1,7 @@
-const { calculateActualCo2,
-        selectSmallestBoxesRequired,
-        takenLorryOffOfRoad,
-        calculateBoxesVolumeMm3
-} = require("../lib/selectBox");
-const boxes = require('../json/boxes.json');
-const orders = require('../json/orders.json');
-
-// console.log(selectSmallestBoxesRequired(boxes, orders))
-// console.log(takenLorryOffOfRoad(selectSmallestBoxesRequired(boxes, orders)));
+const selectSmallestBoxesRequired = require("../lib/selectBox");
+const { takenLorryOffOfRoad } = require('../lib/takenLorryOffOfRoad');
 
 describe("Feature test", () => {
-    const boxes = [
-        {
-            "id": "PK-MED-01",
-            "name": "Medium",
-            "dimensions": {
-                "widthMm": 30,
-                "heightMm": 50,
-                "depthMm": 60
-            },
-            "co2FootprintKg": 200
-        },
-        {
-            "id": "PK-SML-02",
-            "name": "Small",
-            "dimensions": {
-                "widthMm": 20,
-                "heightMm": 80,
-                "depthMm": 50
-            },
-            "co2FootprintKg": 100
-        },
-        {
-            "id": "PK-LRG-03",
-            "name": "Large",
-            "dimensions": {
-                "widthMm": 20,
-                "heightMm": 100,
-                "depthMm": 50
-          },
-          "co2FootprintKg": 300
-        }
-    ];
-
-    const orders = [
-        {
-            "id": "1",
-            "ingredients": [
-                {
-                "name": "radishes",
-                "volumeCm3": 9
-                },
-                {
-                "name": "aubergine",
-                "volumeCm3": 18
-                },
-                {
-                "name": "super pasta",
-                "volumeCm3": 27
-                },
-                {
-                "name": "honey",
-                "volumeCm3": 7.2
-                },
-                {
-                "name": "duck",
-                "volumeCm3": 23
-                }
-          ]
-        },
-        // order volumeInMm3 = 84200
-        {
-          "id": "2",
-          "ingredients": [
-            {
-              "name": "artichokes",
-              "volumeCm3": 20
-            },
-            {
-              "name": "haricots",
-              "volumeCm3": 6.7
-            },
-            {
-              "name": "noodles",
-              "volumeCm3": 18
-            },
-            {
-              "name": "broccoli",
-              "volumeCm3": 27.9
-            },
-            {
-              "name": "mayonnaise",
-              "volumeCm3": 3
-            }
-          ]
-        }
-        // order volumeInMm3 = 75600
-    ];
-
-    describe("calculateBoxesVolumeMm3", () => {
-        const boxes = [
-            {
-                "dimensions": {
-                    "widthMm": 30,
-                    "heightMm": 50,
-                    "depthMm": 60
-                }
-            }
-        ];
-        it("returns array of box objects with volume property", () => {
-            expect(calculateBoxesVolumeMm3(boxes)[0].volMm3).toBe(
-                boxes[0].dimensions.widthMm * boxes[0].dimensions.heightMm * boxes[0].dimensions.depthMm
-            );
-        })
-    })
-    
-    describe("calculateActualCo2", () => {
-        it("returns sum of orders Co2 footprint", () => {
-            const orderBoxes = [
-                {
-                    orderId: "1",
-                    boxId: "PK-MED-01",
-                    co2FootprintKg: 200
-                },
-                {
-                    orderId: "2",
-                    boxId: "PK-SML-02",
-                    co2FootprintKg: 100
-                }
-            ];
-            expect(calculateActualCo2(orderBoxes)).toBe(
-                orderBoxes[0].co2FootprintKg + orderBoxes[1].co2FootprintKg
-            );
-        })
-    })
-    
     describe("selectSmallestBoxesRequired", () => {
         const smallVolMm3 = 80000;
         const mediumVolMm3 = 90000;
@@ -159,10 +26,10 @@ describe("Feature test", () => {
                 {
                     "id": "2",
                     "ingredients": [
-                    {
-                        "name": "artichokes",
-                        "volumeCm3": 70
-                    }
+                        {
+                            "name": "artichokes",
+                            "volumeCm3": (smallVolMm3/1000)-5
+                        }
                     ]
                 }
             ];
@@ -180,9 +47,9 @@ describe("Feature test", () => {
                     "ingredients": [
                         {
                         "name": "radishes",
-                        "volumeCm3": 85
+                        "volumeCm3": (mediumVolMm3/1000)-5
                         }
-                  ]
+                    ]
                 }
             ];
             const optimalBoxesForOrders = 
@@ -199,7 +66,7 @@ describe("Feature test", () => {
                     "ingredients": [
                         {
                         "name": "chocolate cake",
-                        "volumeCm3": 95
+                        "volumeCm3": (largeVolMm3/1000)-5
                         }
                   ]
                 }
@@ -209,6 +76,52 @@ describe("Feature test", () => {
 
             expect(optimalBoxesForOrders[0].orderId).toEqual(orderNeedingLargeBox[0].id);
             expect(optimalBoxesForOrders[0].boxId).toEqual(boxesWithVolumesMm3[2].id);
+        });
+    });
+
+    describe("takenLorryOffOfRoad", () => {
+        it("returns true when more than CO2 Lorry Amount saved", () => {
+            const co2LorryAmount = 1000;
+            const maxBoxCo2Footprint = 300;
+            const intelligentlyPackedBoxData = [
+                {
+                    co2FootprintKg: 10
+                },
+                {
+                    co2FootprintKg: 10
+                },
+                {
+                    co2FootprintKg: 10
+                },
+                {
+                    co2FootprintKg: 10
+                },
+            ];
+
+            expect(takenLorryOffOfRoad(intelligentlyPackedBoxData, co2LorryAmount, maxBoxCo2Footprint))
+                .toBe(true);
+        });
+
+        it("returns false when less than CO2 Lorry Amount saved", () => {
+            const co2LorryAmount = 1000;
+            const maxBoxCo2Footprint = 300;
+            const intelligentlyPackedBoxData = [
+                {
+                    co2FootprintKg: 200
+                },
+                {
+                    co2FootprintKg: 200
+                },
+                {
+                    co2FootprintKg: 200
+                },
+                {
+                    co2FootprintKg: 200
+                },
+            ];
+
+            expect(takenLorryOffOfRoad(intelligentlyPackedBoxData, co2LorryAmount, maxBoxCo2Footprint))
+                .toBe(false);
         });
     });
 });
