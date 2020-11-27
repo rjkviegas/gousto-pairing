@@ -18,7 +18,7 @@ function calculateBoxes(boxes, orders) {
         result.orderId = order["id"];
         const orderVolMm3 = calcOrderVolMm3(order);
         const firstAdequateBox = enrichBoxes(boxes)
-            .filter(box => orderVolMm3 < box.volMm3)[0]
+            .find(box => orderVolMm3 < box.volMm3)
         result.boxId = firstAdequateBox.id;
         result.co2FootprintKg = firstAdequateBox["co2FootprintKg"];
         return result;
