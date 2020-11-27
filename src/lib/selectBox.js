@@ -1,6 +1,6 @@
 const maxBoxCo2Footprint = 300;
 const co2LorryAmount = 1000;
-const Cm3ToMm3Multiplier = 1000;
+const cm3ToMm3Multiplier = 1000;
 
 function takenLorryOffOfRoad(orderBoxes) {
     return (calculateMaxCo2(orderBoxes) - calculateActualCo2(orderBoxes) >= co2LorryAmount);
@@ -15,21 +15,20 @@ function calculateMaxCo2(orderBoxes) {
 }
 
 function calculateBoxes(boxes, orders) {
-    return orders.map(selectBox)
+    return orders.map(selectSmallestPossibleBox)
 
-    function selectBox(order) {
+    function selectSmallestPossibleBox(order) {
         const result = {};
         result.orderId = order["id"];
         const orderVolMm3 = calcOrderVolMm3(order);
-        const firstAdequateBox = enrichBoxes(boxes)
-            .find(box => orderVolMm3 < box.volMm3)
+        const firstAdequateBox = enrichBoxes(boxes).find(box => orderVolMm3 < box.volMm3)
         result.boxId = firstAdequateBox.id;
         result.co2FootprintKg = firstAdequateBox["co2FootprintKg"];
         return result;
     
         function calcOrderVolMm3(order) {
             return order.ingredients
-                .reduce((acc, ingredient) => acc + ingredient.volumeCm3, 0) * Cm3ToMm3Multiplier;
+                .reduce((acc, ingredient) => acc + ingredient.volumeCm3, 0) * cm3ToMm3Multiplier;
         }
 
         function enrichBoxes(boxes) {
@@ -43,11 +42,8 @@ function calculateBoxes(boxes, orders) {
         }
     
         function calcBoxVolMm3(box) {
-            let result = 1;
-            for (const dim in box.dimensions) {
-                result *= box.dimensions[dim];
-            }
-            return result;
+            return Object.keys(box.dimensions)
+                .reduce((acc, dim) => acc * box.dimensions[dim], 1)
         }
     }
 };

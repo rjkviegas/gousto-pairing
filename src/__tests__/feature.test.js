@@ -136,40 +136,4 @@ describe("Feature test", () => {
             ])
         })
     });
-    
-    // describe("selectBox", () => {
-    //     it("returns a box big enough for an order", () => {
-    //         const order = {
-    //             "id": "1",
-    //             "ingredients": [
-    //                 {
-    //                     "name": "radishes",
-    //                     "volumeCm3": 9
-    //                 },
-    //                 {
-    //                     "name": "aubergine",
-    //                     "volumeCm3": 18
-    //                 },
-    //                 {
-    //                     "name": "super pasta",
-    //                     "volumeCm3": 27
-    //                 },
-    //                 {
-    //                     "name": "honey",
-    //                     "volumeCm3": 7.2
-    //                 },
-    //                 {
-    //                     "name": "duck",
-    //                     "volumeCm3": 23
-    //                 }
-    //             ]
-    //           };
-    //         // order volumeInMm3 = 84200
-
-    //         expect(selectBox(boxes, order)).toEqual({
-    //             orderId: "1",
-    //             boxId: "PK-MED-01"
-    //         });
-    //     })
-    // })
-})
+});
