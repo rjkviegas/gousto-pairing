@@ -1,9 +1,5 @@
-function calculateCo2(orderBoxObjs) {
-    let result = 0;
-    orderBoxObjs.forEach(box => {
-        result += box.co2FootprintKg;
-    })
-    return result;
+function calculateCo2(orderBoxes) {
+    return orderBoxes.reduce((acc, orderBox) => acc + orderBox.co2FootprintKg, 0)
 }
 
 function calculateBoxes(boxes, orders) {
@@ -13,20 +9,16 @@ function calculateBoxes(boxes, orders) {
         const result = {};
         result.orderId = order["id"];
         const orderVolMm3 = calcOrderVol(order);
-        result.boxId = boxes.map(enrichBox)
+        const adequatelySizedBox = boxes.map(enrichBox)
             .sort((a, b) => a.volMm3 - b.volMm3)
-            .filter(box => orderVolMm3 < box.volMm3)[0].id;
-        result.co2FootprintKg = boxes.map(enrichBox)
-            .sort((a, b) => a.volMm3 - b.volMm3)
-            .filter(box => orderVolMm3 < box.volMm3)[0]["co2FootprintKg"];
+            .filter(box => orderVolMm3 < box.volMm3)[0]
+        result.boxId = adequatelySizedBox.id;
+        result.co2FootprintKg = adequatelySizedBox["co2FootprintKg"];
         return result;
     
         function calcOrderVol(order) {
-            let result = 0;
-            order.ingredients.forEach(ingredient => {
-                result += ingredient.volumeCm3;
-            });
-            return result*1000;
+            return order.ingredients
+                .reduce((acc, ingredient) => acc + ingredient.volumeCm3, 0) * 1000;
         }
     
         function enrichBox(box) {

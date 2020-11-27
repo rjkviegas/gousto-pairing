@@ -94,7 +94,7 @@ describe("Feature test", () => {
     
     describe("calculateCo2", () => {
         it("returns sum of orders Co2 footprint", () => {
-            const calculatedBoxes = [
+            const orderBoxes = [
                 {
                     orderId: "1",
                     boxId: "PK-MED-01",
@@ -106,7 +106,7 @@ describe("Feature test", () => {
                     co2FootprintKg: 100
                 }
             ];
-            expect(calculateCo2(calculatedBoxes)).toBe(300)
+            expect(calculateCo2(orderBoxes)).toBe(300)
         })
     })
     
