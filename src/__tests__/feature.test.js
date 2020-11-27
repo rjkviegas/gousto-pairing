@@ -1,4 +1,4 @@
-const selectSmallestBoxesRequired = require("../lib/selectBox");
+const selectSmallestBoxesRequired = require("../lib/selectSmallestBoxesRequired");
 const { takenLorryOffOfRoad } = require('../lib/takenLorryOffOfRoad');
 
 describe("Feature test", () => {
