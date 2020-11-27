@@ -1,5 +1,9 @@
+const maxBoxCo2Footprint = 300;
+const co2LorryAmount = 1000;
+const Cm3ToMm3Multiplier = 1000;
+
 function takenLorryOffOfRoad(orderBoxes) {
-    return (calculateMaxCo2(orderBoxes) - calculateActualCo2(orderBoxes) >= 1000);
+    return (calculateMaxCo2(orderBoxes) - calculateActualCo2(orderBoxes) >= co2LorryAmount);
 }
 
 function calculateActualCo2(orderBoxes) {
@@ -7,7 +11,7 @@ function calculateActualCo2(orderBoxes) {
 }
 
 function calculateMaxCo2(orderBoxes) {
-    return orderBoxes.length * 300;
+    return orderBoxes.length * maxBoxCo2Footprint;
 }
 
 function calculateBoxes(boxes, orders) {
@@ -25,7 +29,7 @@ function calculateBoxes(boxes, orders) {
     
         function calcOrderVolMm3(order) {
             return order.ingredients
-                .reduce((acc, ingredient) => acc + ingredient.volumeCm3, 0) * 1000;
+                .reduce((acc, ingredient) => acc + ingredient.volumeCm3, 0) * Cm3ToMm3Multiplier;
         }
 
         function enrichBoxes(boxes) {
