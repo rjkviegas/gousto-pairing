@@ -1,4 +1,4 @@
-const { boxCalculator } = require("../lib/selectBox");
+const { calculateCo2, calculateBoxes } = require("../lib/selectBox");
 
 describe("Feature test", () => {
     const boxes = [
@@ -35,73 +35,94 @@ describe("Feature test", () => {
           "co2FootprintKg": 300
         }
         // boxVolMm3 = 100000
-      ];
-    
-    describe("calculateBoxes", () => {
-        it("returns array of object containing order ids and box ids", () => {
-            const orders = [
+    ];
+
+    const orders = [
+        {
+            "id": "1",
+            "ingredients": [
                 {
-                    "id": "1",
-                    "ingredients": [
-                        {
-                        "name": "radishes",
-                        "volumeCm3": 9
-                        },
-                        {
-                        "name": "aubergine",
-                        "volumeCm3": 18
-                        },
-                        {
-                        "name": "super pasta",
-                        "volumeCm3": 27
-                        },
-                        {
-                        "name": "honey",
-                        "volumeCm3": 7.2
-                        },
-                        {
-                        "name": "duck",
-                        "volumeCm3": 23
-                        }
-                  ]
+                "name": "radishes",
+                "volumeCm3": 9
                 },
-                // order volumeInMm3 = 84200
                 {
-                  "id": "2",
-                  "ingredients": [
-                    {
-                      "name": "artichokes",
-                      "volumeCm3": 20
-                    },
-                    {
-                      "name": "haricots",
-                      "volumeCm3": 6.7
-                    },
-                    {
-                      "name": "noodles",
-                      "volumeCm3": 18
-                    },
-                    {
-                      "name": "broccoli",
-                      "volumeCm3": 27.9
-                    },
-                    {
-                      "name": "mayonnaise",
-                      "volumeCm3": 3
-                    }
-                  ]
+                "name": "aubergine",
+                "volumeCm3": 18
+                },
+                {
+                "name": "super pasta",
+                "volumeCm3": 27
+                },
+                {
+                "name": "honey",
+                "volumeCm3": 7.2
+                },
+                {
+                "name": "duck",
+                "volumeCm3": 23
                 }
-                // order volumeInMm3 = 75600
-            ];
-            
-            expect(boxCalculator(boxes, orders)).toEqual([
+          ]
+        },
+        // order volumeInMm3 = 84200
+        {
+          "id": "2",
+          "ingredients": [
+            {
+              "name": "artichokes",
+              "volumeCm3": 20
+            },
+            {
+              "name": "haricots",
+              "volumeCm3": 6.7
+            },
+            {
+              "name": "noodles",
+              "volumeCm3": 18
+            },
+            {
+              "name": "broccoli",
+              "volumeCm3": 27.9
+            },
+            {
+              "name": "mayonnaise",
+              "volumeCm3": 3
+            }
+          ]
+        }
+        // order volumeInMm3 = 75600
+    ];
+    
+    describe("calculateCo2", () => {
+        it("returns sum of orders Co2 footprint", () => {
+            const calculatedBoxes = [
                 {
                     orderId: "1",
-                    boxId: "PK-MED-01"
+                    boxId: "PK-MED-01",
+                    co2FootprintKg: 200
                 },
                 {
                     orderId: "2",
-                    boxId: "PK-SML-02"
+                    boxId: "PK-SML-02",
+                    co2FootprintKg: 100
+                }
+            ];
+            expect(calculateCo2(calculatedBoxes)).toBe(300)
+        })
+    })
+    
+    describe("calculateBoxes", () => {
+        it("returns array of object containing order ids and box ids", () => {
+            expect(calculateBoxes(boxes, orders)).toEqual([
+                {
+                    orderId: "1",
+                    boxId: "PK-MED-01",
+                    co2FootprintKg: 200
+                },
+                {
+                    orderId: "2",
+                    boxId: "PK-SML-02",
+                    co2FootprintKg: 100
+
                 }
             ])
         })
